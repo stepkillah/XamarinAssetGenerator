@@ -1,6 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetGenerator", "AssetGenerator\AssetGenerator.csproj", "{5C191E9A-6B9F-4E07-B7FF-45AFD928D02D}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetGenerator", "AssetGeneratoreCore\AssetGenerator.csproj", "{8452B01D-200E-49CB-A7F2-278B2DE926D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5C191E9A-6B9F-4E07-B7FF-45AFD928D02D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5C191E9A-6B9F-4E07-B7FF-45AFD928D02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5C191E9A-6B9F-4E07-B7FF-45AFD928D02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5C191E9A-6B9F-4E07-B7FF-45AFD928D02D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8452B01D-200E-49CB-A7F2-278B2DE926D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8452B01D-200E-49CB-A7F2-278B2DE926D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8452B01D-200E-49CB-A7F2-278B2DE926D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8452B01D-200E-49CB-A7F2-278B2DE926D1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F00DC5F0-E639-4A89-A92B-3E3042672CB7}
 	EndGlobalSection
 EndGlobal

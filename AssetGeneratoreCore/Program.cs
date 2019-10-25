@@ -2,10 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AssetGenerator;
 using CommandLine;
 using SkiaSharp.Extended.Svg;
 
-namespace AssetGenerator
+namespace AssetGeneratoreCore
 {
     public class XamarinAssetGenerator
     {

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "AssetGenerator": {
+      "commandName": "Project"
+    },
+    "Show Version": {
+      "commandName": "Project",
+      "commandLineArgs": "-m android "
+    }
+  }
+}

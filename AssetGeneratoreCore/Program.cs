@@ -79,12 +79,13 @@ namespace AssetGenerator
             int quality, string postfix)
         {
             // It fails to create the first file
-            var firstItem = files[0];
+            var firstItem = files[1];
             var initalLoad = new SKSvg();
-            initalLoad.Load(firstItem);
-            await PngHelper.GeneratePng((int) initalLoad.CanvasSize.Width, (int) initalLoad.CanvasSize.Height,
-                firstItem, "temp", 1);
-            File.Delete("temp");
+            await using var stream = File.OpenRead(firstItem);
+            initalLoad.Load(stream);
+            await PngHelper.GeneratePng((int)initalLoad.CanvasSize.Width, (int)initalLoad.CanvasSize.Height,
+                firstItem, "tempFile", 1);
+            File.Delete("tempFile");
 
             foreach (var filepath in files.OrderBy(s => s).ToList())
             {

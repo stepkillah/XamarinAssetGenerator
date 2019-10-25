@@ -3,9 +3,9 @@
     "AssetGenerator": {
       "commandName": "Project"
     },
-    "Show Version": {
+    "BasicConverting": {
       "commandName": "Project",
-      "commandLineArgs": "-m android "
+      "commandLineArgs": "-m android --source HK -d temp"
     }
   }
 }

@@ -5,7 +5,7 @@
     },
     "BasicConverting": {
       "commandName": "Project",
-      "commandLineArgs": "-m android --source HK -d temp"
+      "commandLineArgs": "-m android --source HK -d temp --version"
     }
   }
 }

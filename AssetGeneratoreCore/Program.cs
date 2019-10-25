@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CommandLine;
 using SkiaSharp.Extended.Svg;
@@ -20,9 +21,13 @@ namespace AssetGenerator
             var result = Parser.Default.ParseArguments<Options>(args);
             var postfix = string.Empty;
             var quality = 80;
-
             result.WithParsed(options =>
                 {
+                    if (options.Version)
+                    {
+                        Console.WriteLine($"AssetGenerator Version - {Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion}");
+                        Environment.Exit(1);
+                    }
                     mode = options.Mode;
                     if (!string.IsNullOrEmpty(options.SourceFolderPath))
                     {

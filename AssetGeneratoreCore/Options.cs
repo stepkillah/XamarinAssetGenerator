@@ -22,7 +22,7 @@ namespace AssetGenerator
         public string Postfix { get; set; }
 
         [Option('v', "version", Separator = '-', HelpText = "Display version information", Required = false)]
-        public string Version { get; set; }
+        public bool Version { get; set; }
 
         [Usage(ApplicationAlias = "AssetGenerator")]
         public static IEnumerable<Example> Examples

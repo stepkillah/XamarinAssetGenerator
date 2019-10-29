@@ -21,6 +21,7 @@ namespace AssetGenerator
             var result = Parser.Default.ParseArguments<Options>(args);
             var postfix = string.Empty;
             var quality = 80;
+            GeneratorMode currentMode = GeneratorMode.Android;
             result.WithParsed(options =>
                 {
                     if (options.Version)
@@ -29,14 +30,27 @@ namespace AssetGenerator
                         Environment.Exit(1);
                     }
                     mode = options.Mode;
+                    currentMode = Enum.Parse<GeneratorMode>(mode, true);
                     if (!string.IsNullOrEmpty(options.SourceFolderPath))
                     {
                         sourceDirectory = Path.Combine(sourceDirectory, options.SourceFolderPath);
-                        if (!Directory.Exists(sourceDirectory))
+                        if (currentMode == GeneratorMode.AppIcon)
                         {
-                            Console.WriteLine("Source directory does not exist");
-                            Environment.Exit(1);
+                            if (!File.Exists(sourceDirectory))
+                            {
+                                Console.WriteLine("Source file does not exist");
+                                Environment.Exit(1);
+                            }
                         }
+                        else
+                        {
+                            if (!Directory.Exists(sourceDirectory))
+                            {
+                                Console.WriteLine("Source directory does not exist");
+                                Environment.Exit(1);
+                            }
+                        }
+
                     }
 
                     if (!string.IsNullOrEmpty(options.DestinationFolderPath))
@@ -68,19 +82,33 @@ namespace AssetGenerator
                     Environment.Exit(1);
                 });
 
-            var currentMode = mode == iOS.ToLowerInvariant() ? DeviceType.iOS : DeviceType.Android;
-            var files = Directory.GetFiles(sourceDirectory, "*.svg");
-            if (files.Length == 0)
+            if (currentMode == GeneratorMode.AppIcon)
             {
-                Console.WriteLine("No .svg files found in directory");
-                Environment.Exit(1);
+                await GenerateIcons(sourceDirectory, destinationDirectory, quality);
+            }
+            else
+            {
+                var files = Directory.GetFiles(sourceDirectory, "*.svg");
+                if (files.Length == 0)
+                {
+                    Console.WriteLine("No .svg files found in directory");
+                    Environment.Exit(1);
+                }
+
+                await GenerateAssets(files, currentMode, destinationDirectory, quality, postfix);
             }
 
-            await GenerateAssets(files, currentMode, destinationDirectory, quality, postfix);
             return await Task.FromResult(0);
         }
 
-        private static async Task GenerateAssets(string[] files, DeviceType mode, string destinationDirectory,
+
+        private static async Task GenerateIcons(string filePath, string destinationDirectory, int quality)
+        {
+            var generator = new IOSAssetGenerator();
+            await generator.CreateIcon(filePath, Path.GetFileNameWithoutExtension(filePath), destinationDirectory, quality);
+        }
+
+        private static async Task GenerateAssets(string[] files, GeneratorMode mode, string destinationDirectory,
             int quality, string postfix)
         {
             // It fails to create the first file
@@ -97,7 +125,7 @@ namespace AssetGenerator
                 Console.WriteLine($"Creating assets from {filepath}");
 
                 var filename = Path.GetFileNameWithoutExtension(filepath);
-                if (mode == DeviceType.iOS)
+                if (mode == GeneratorMode.iOS)
                 {
                     var generator = new IOSAssetGenerator();
                     await generator.CreateAsset(filepath, filename, destinationDirectory, quality, string.Empty);

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace AssetGenerator
 {
@@ -6,5 +7,7 @@ namespace AssetGenerator
     {
         Task CreateAsset(string filepath, string filename, string destinationDirectory, int quality,
             string postfix = default);
+
+        Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality);
     }
 }

@@ -6,7 +6,7 @@ namespace AssetGenerator
 {
     public class Options
     {
-        [Option('m', "mode", HelpText = "Specify which assets to build. ios or android", Required = true)]
+        [Option('m', "mode", HelpText = "Specify which assets to build. ios or android or appicon", Required = true)]
         public string Mode { get; set; }
 
         [Option('s', "source", Separator = '-', HelpText = "Specify source folder", Required = false)]

@@ -5,7 +5,11 @@
     },
     "BasicConverting": {
       "commandName": "Project",
-      "commandLineArgs": "-m android --source HK -d temp --version"
+      "commandLineArgs": "-m android --source ../HK -d ../temp"
+    },
+    "AppIcon": {
+      "commandName": "Project",
+      "commandLineArgs": "-m appicon -s ../nte/appicon.svg -d ../temp"
     }
   }
 }

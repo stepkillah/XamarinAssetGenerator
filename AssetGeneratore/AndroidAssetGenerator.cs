@@ -69,5 +69,11 @@ namespace AssetGenerator
                     Environment.Exit(1);
                 }
         }
+
+        public Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

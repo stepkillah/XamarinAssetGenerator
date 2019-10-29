@@ -58,7 +58,7 @@ namespace AssetGenerator
             new GenerationIcon(new SKSize(40,40), new []{1,2}, IpadIdiom),
             new GenerationIcon(new SKSize(76,76), new []{1,2}, IpadIdiom),
             new GenerationIcon(new SKSize(83.5f,83.5f), new []{2}, IpadIdiom),
-
+            new GenerationIcon(new SKSize(1024,1024), new []{1}, IosMarketing)
         };
 
         public async Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality)
@@ -68,12 +68,12 @@ namespace AssetGenerator
             {
                 foreach (int scale in icon.Scale)
                 {
-                    var newFilename = scale > 1 ? $"{fileName}-{icon.Idiom}-{(int)icon.Size.Width}@{scale}x.png" : $"{fileName}-{icon.Idiom}-{(int)icon.Size.Width}.png";
+                    var newFilename = scale > 1 ? $"{fileName}-{icon.Idiom}-{icon.Size.Width}@{scale}x.png" : $"{fileName}-{icon.Idiom}-{icon.Size.Width}.png";
                     await PngHelper.GeneratePng(icon.Size.Width * scale, icon.Size.Height * scale, filePath, Path.Combine(destinationDirectory, newFilename), quality);
                     contentJson.Images.Add(new Image()
                     {
                         Scale = $"{scale}x",
-                        Size = $"{(int)icon.Size.Width}x{(int)icon.Size.Height}",
+                        Size = $"{icon.Size.Width}x{icon.Size.Height}",
                         Idiom = icon.Idiom,
                         Filename = newFilename
                     });

@@ -77,6 +77,8 @@ namespace AssetGenerator
                         Idiom = icon.Idiom,
                         Filename = newFilename
                     });
+                    
+                    Console.WriteLine($"Successfully created asset: {Path.GetFileName(newFilename)}");
                 }
             }
 

@@ -11,18 +11,17 @@ namespace AssetGenerator.IconsGeneration
         public Content()
         {
             Images = new List<Image>();
-           // Properties = new Properties();
+            Properties = new Properties();
             Info = new Info();
         }
 
         [JsonProperty("images")]
         public List<Image> Images { get; set; }
 
-       // [JsonProperty("properties")]
-       // public Properties Properties { get; set; }
-
         [JsonProperty("info")]
         public Info Info { get; set; }
+        [JsonProperty("properties")]
+        public Properties Properties { get; set; }
     }
 
     internal class Image
@@ -51,7 +50,7 @@ namespace AssetGenerator.IconsGeneration
         [JsonProperty("author")] public string Author { get; set; } = "xcode";
     }
 
-    //internal class Properties
-    //{
-    //}
+    internal class Properties
+    {
+    }
 }

@@ -77,13 +77,16 @@ namespace AssetGenerator
                         Idiom = icon.Idiom,
                         Filename = newFilename
                     });
-                    
+
                     Console.WriteLine($"Successfully created asset: {Path.GetFileName(newFilename)}");
                 }
             }
 
-            var rawJson = JsonConvert.SerializeObject(contentJson);
-            await File.WriteAllTextAsync($"{destinationDirectory}/Contents.json", rawJson);
+            var rawJson = JsonConvert.SerializeObject(contentJson, Formatting.Indented);
+            var contentsJsonPath = Path.Combine(destinationDirectory, "Contents.json");
+            await File.WriteAllTextAsync(contentsJsonPath, rawJson);
+            Console.WriteLine($"Successfully created Contents.json file: {Path.GetFileName(contentsJsonPath)}");
+            Console.WriteLine($"Contents.json content:\n {rawJson}");
         }
 
 

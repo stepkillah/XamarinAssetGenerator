@@ -68,8 +68,8 @@ namespace AssetGenerator
             {
                 foreach (int scale in icon.Scale)
                 {
-                    var newFilename = scale > 1 ? $"{fileName}-{icon.Idiom}-{icon.Size.Width}@{scale}x.png" : $"{fileName}-{icon.Idiom}-{icon.Size.Width}.png";
-                    await PngHelper.GeneratePng(icon.Size.Width * scale, icon.Size.Height * scale, filePath, Path.Combine(destinationDirectory, newFilename), quality);
+                    var newFilename = scale > 1 ? $"{fileName}-{icon.Size.Width}@{scale}x~{icon.Idiom}.png" : $"{fileName}-{icon.Size.Width}~{icon.Idiom}.png";
+                    await PngHelper.GeneratePng(icon.Size.Width * scale, icon.Size.Height * scale, filePath, Path.Combine(destinationDirectory, newFilename), quality, true);
                     contentJson.Images.Add(new Image()
                     {
                         Scale = $"{scale}x",

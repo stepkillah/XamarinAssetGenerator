@@ -9,7 +9,7 @@
     },
     "AppIcon": {
       "commandName": "Project",
-      "commandLineArgs": "-m appicon -s ../nte/appicon.svg -d ../temp"
+      "commandLineArgs": "-m appicon -s ../hk/appicon.svg -d ../temp"
     }
   }
 }

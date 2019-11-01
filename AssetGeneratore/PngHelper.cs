@@ -26,7 +26,7 @@ namespace AssetGenerator
         {
             using SKImage srcImg = data;
             SKImageInfo info = new SKImageInfo((int)width, (int)height,
-                SKImageInfo.PlatformColorType, SKAlphaType.Premul, SKColorSpace.CreateSrgb());
+                SKImageInfo.PlatformColorType, SKAlphaType.Opaque, SKColorSpace.CreateSrgb());
             // this is the important part. set the destination ColorSpace as
             // `SKColorSpace.CreateSrgb()`. Skia will then be able to automatically convert
             // the original CMYK colorspace, to this new sRGB colorspace.

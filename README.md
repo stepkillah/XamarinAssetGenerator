@@ -4,9 +4,9 @@ Converts image resources from svg to png and scales the images to desired size
 
 Common usage: 
 ```
-mono AssetGenerator.exe -d destinationfolder -m iOS -q 80 -s sourcefolder
+dotnet AssetGenerator.dll -d destinationfolder -m iOS -q 80 -s sourcefolder
 
-  -m, --mode           Required. Specify which assets to build. ios or android
+  -m, --mode           Required. Specify which assets to build. (ios, android, appicon)
 
   -s, --source         Specify source folder
 

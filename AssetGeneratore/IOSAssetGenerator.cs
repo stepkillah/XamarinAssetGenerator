@@ -1,40 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using AssetGenerator.IconsGeneration;
 using Newtonsoft.Json;
 using SkiaSharp;
-using SKSvg = SkiaSharp.Extended.Svg.SKSvg;
+using Image = AssetGenerator.IconsGeneration.Image;
 
 namespace AssetGenerator
 {
-    public class IOSAssetGenerator : IAssetGenerator
+    public class IosAssetGenerator : BaseAssetGenerator
     {
-
         private const string IphoneIdiom = "iphone";
         private const string IpadIdiom = "ipad";
         private const string IosMarketing = "ios-marketing";
 
-        public async Task CreateAsset(string filepath, string filename, string destinationDirectory, int quality,
+        public override async Task CreateAsset(string filepath, string filename, string destinationDirectory, int quality,
             string postfix = default)
         {
+
+            var svg = GetSvg(filepath);
+
             for (var i = 1; i < 4; i++)
             {
                 try
                 {
-                    var svg = GetSvg(filepath);
-
                     string newFilename;
                     if (i == 1)
                         newFilename = filename + ".png";
                     else
                         newFilename = filename + $"@{i}x.png";
 
-                    var width = (int)(svg.CanvasSize.Width * i);
-                    var height = (int)(svg.CanvasSize.Height * i);
-                    await PngHelper.GeneratePng(width, height, filepath, Path.Combine(destinationDirectory, newFilename), quality);
+
+                    var width = (int)(svg.Picture.CullRect.Width * i);
+                    var height = (int)(svg.Picture.CullRect.Height * i);
+
+
+                    await PngHelper.GeneratePng(svg, width, height, Path.Combine(destinationDirectory, newFilename), quality);
                     Console.WriteLine($"Successfully created asset: {Path.GetFileName(newFilename)}");
                 }
                 catch (Exception e)
@@ -61,15 +63,16 @@ namespace AssetGenerator
             new GenerationIcon(new SKSize(1024,1024), new []{1}, IosMarketing)
         };
 
-        public async Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality)
+        public override async Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality)
         {
             Content contentJson = new Content();
+            var iconSvg = GetSvg(filePath);
             foreach (GenerationIcon icon in IconSizes)
             {
                 foreach (int scale in icon.Scale)
                 {
                     var newFilename = scale > 1 ? $"{fileName}-{icon.Size.Width}@{scale}x~{icon.Idiom}.png" : $"{fileName}-{icon.Size.Width}~{icon.Idiom}.png";
-                    await PngHelper.GeneratePng(icon.Size.Width * scale, icon.Size.Height * scale, filePath, Path.Combine(destinationDirectory, newFilename), quality, true);
+                    await PngHelper.GeneratePng(iconSvg, icon.Size.Width * scale, icon.Size.Height * scale, Path.Combine(destinationDirectory, newFilename), quality, true);
                     contentJson.Images.Add(new Image()
                     {
                         Scale = $"{scale}x",
@@ -89,23 +92,5 @@ namespace AssetGenerator
             Console.WriteLine($"Contents.json content:\n {rawJson}");
         }
 
-
-        private SKSvg GetSvg(string filePath)
-        {
-            var svg = new SKSvg();
-            try
-            {
-                svg.Load(filePath);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Unexpected error when parsing asset: {filePath}");
-                Console.WriteLine("Error: " + e.Message);
-                Console.WriteLine("Exiting with error 1");
-                Environment.Exit(1);
-            }
-
-            return svg;
-        }
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using CommandLine;
-using SkiaSharp.Extended.Svg;
 
 namespace AssetGenerator
 {
@@ -34,7 +33,7 @@ namespace AssetGenerator
                     if (!string.IsNullOrEmpty(options.SourceFolderPath))
                     {
                         sourceDirectory = Path.Combine(sourceDirectory, options.SourceFolderPath);
-                        if (currentMode == GeneratorMode.AppIcon)
+                        if (currentMode == GeneratorMode.AppIconAndroid || currentMode == GeneratorMode.AppIconIos)
                         {
                             if (!File.Exists(sourceDirectory))
                             {
@@ -82,9 +81,9 @@ namespace AssetGenerator
                     Environment.Exit(1);
                 });
 
-            if (currentMode == GeneratorMode.AppIcon)
+            if (currentMode == GeneratorMode.AppIconAndroid || currentMode == GeneratorMode.AppIconIos)
             {
-                await GenerateIcons(sourceDirectory, destinationDirectory, quality);
+                await GenerateIcons(sourceDirectory, destinationDirectory, quality, currentMode);
             }
             else
             {
@@ -102,23 +101,15 @@ namespace AssetGenerator
         }
 
 
-        private static async Task GenerateIcons(string filePath, string destinationDirectory, int quality)
+        private static async Task GenerateIcons(string filePath, string destinationDirectory, int quality, GeneratorMode mode)
         {
-            var generator = new IOSAssetGenerator();
+            var generator = mode == GeneratorMode.AppIconIos ? new IosAssetGenerator() : (IAssetGenerator)new AndroidAssetGenerator();
             await generator.CreateIcon(filePath, Path.GetFileNameWithoutExtension(filePath), destinationDirectory, quality);
         }
 
         private static async Task GenerateAssets(string[] files, GeneratorMode mode, string destinationDirectory,
             int quality, string postfix)
         {
-            // It fails to create the first file
-            var firstItem = files[1];
-            var initalLoad = new SKSvg();
-            await using var stream = File.OpenRead(firstItem);
-            initalLoad.Load(stream);
-            await PngHelper.GeneratePng((int)initalLoad.CanvasSize.Width, (int)initalLoad.CanvasSize.Height,
-                firstItem, "tempFile", 1);
-            File.Delete("tempFile");
 
             foreach (var filepath in files.OrderBy(s => s).ToList())
             {
@@ -127,7 +118,7 @@ namespace AssetGenerator
                 var filename = Path.GetFileNameWithoutExtension(filepath);
                 if (mode == GeneratorMode.iOS)
                 {
-                    var generator = new IOSAssetGenerator();
+                    var generator = new IosAssetGenerator();
                     await generator.CreateAsset(filepath, filename, destinationDirectory, quality, string.Empty);
                 }
                 else

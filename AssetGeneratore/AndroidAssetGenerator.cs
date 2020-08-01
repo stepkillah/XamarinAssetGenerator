@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using SkiaSharp.Extended.Svg;
 
 namespace AssetGenerator
 {
-    public class AndroidAssetGenerator : IAssetGenerator
+    public class AndroidAssetGenerator : BaseAssetGenerator
     {
-        public async Task CreateAsset(string filepath, string filename, string destinationDirectory, int quality,
-            string postfix)
+
+        public override async Task CreateAsset(string filepath, string filename, string destinationDirectory, int quality,
+            string postfix = default)
         {
             var resourceTypes = new Dictionary<AndroidResourceType, float>
             {
@@ -22,58 +22,103 @@ namespace AssetGenerator
                 {AndroidResourceType.XXXHDPI, 4f}
             };
 
-            foreach (var resourceType in resourceTypes)
+
+            await GenerateAsset(new AndroidGeneratorOptions(resourceTypes, filepath, filename, destinationDirectory, quality,
+                false, postfix));
+        }
+
+        public override async Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality)
+        {
+            var resourceTypes = new Dictionary<AndroidResourceType, float>
+            {
+                // Scale factors
+                {AndroidResourceType.LDPI, 48},
+                {AndroidResourceType.MDPI, 72},
+                {AndroidResourceType.HDPI, 96},
+                {AndroidResourceType.XHDPI, 144},
+                {AndroidResourceType.XXHDPI, 192},
+                {AndroidResourceType.XXXHDPI, 512}
+            };
+
+            await GenerateAsset(new AndroidGeneratorOptions(resourceTypes, filePath, fileName, destinationDirectory, quality,
+                true, prefix: "mipmap"));
+        }
+
+
+
+        private async Task GenerateAsset(AndroidGeneratorOptions options)
+        {
+            var svg = GetSvg(options.FilePath);
+
+            foreach (var resourceType in options.ResourcesTypes)
                 try
                 {
                     var name = Enum.GetName(typeof(AndroidResourceType), resourceType.Key);
-                    var resourceDirectoryName = string.IsNullOrEmpty(postfix)
-                        ? $"drawable-{name.ToLowerInvariant()}"
-                        : $"drawable-{name.ToLowerInvariant()}-{postfix}";
-                    var svg = new SKSvg();
-                    try
-                    {
-                        svg.Load(filepath);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Unexpected error when parsing asset: {filepath}");
-                        Console.WriteLine("Error: " + e.Message);
-                        Console.WriteLine("Exiting with error 1");
-                        Environment.Exit(1);
-                    }
+                    if (string.IsNullOrEmpty(name))
+                        throw new ArgumentException("Unknown android resource type");
 
-                    var width = (int) (svg.CanvasSize.Width * resourceType.Value);
-                    var height = (int) (svg.CanvasSize.Height * resourceType.Value);
-                    
+                    var resourceDirectoryName = string.IsNullOrEmpty(options.Postfix)
+                        ? $"{options.Prefix}-{name.ToLowerInvariant()}"
+                        : $"{options.Prefix}-{name.ToLowerInvariant()}-{options.Postfix}";
+
+                    var width = options.Icon ? resourceType.Value : (int)(svg.Picture.CullRect.Width * resourceType.Value);
+                    var height = options.Icon ? resourceType.Value : (int)(svg.Picture.CullRect.Height * resourceType.Value);
+
                     // Cheap clamp
                     if (width < 1)
                         width = 1;
                     if (height < 1)
                         height = 1;
-                    
-                    var filenameWithExtension = $"{filename}.png";
-                    var resourceDir = Path.Combine(destinationDirectory, resourceDirectoryName);
+
+                    var filenameWithExtension = $"{options.FileName}.png";
+                    var resourceDir = Path.Combine(options.DestinationDirectory, resourceDirectoryName);
                     if (!Directory.Exists(resourceDir))
                     {
                         Directory.CreateDirectory(resourceDir);
                     }
                     var finalPath = Path.Combine(resourceDir, filenameWithExtension);
-                    await PngHelper.GeneratePng(width, height, filepath, finalPath, quality);
+                    //await PngHelper.GeneratePng(width, height, filepath, finalPath, quality);
+                    await PngHelper.GeneratePng(svg, width, height, finalPath, options.Quality);
+
                     Console.WriteLine($"Successfully created asset: {finalPath}");
+
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Failed to generate asset: {filename}");
+                    Console.WriteLine($"Failed to generate asset: {options.FileName}");
                     Console.WriteLine("Error: " + e.Message);
                     Console.WriteLine("Exiting with error 1");
                     Environment.Exit(1);
                 }
         }
 
-        public Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality)
-        {
-            throw new NotImplementedException();
-        }
 
+
+        internal class AndroidGeneratorOptions
+        {
+
+            public AndroidGeneratorOptions(Dictionary<AndroidResourceType, float> resourcesTypes, string filePath, string fileName, string destinationDirectory, int quality, bool icon,
+                string postfix = default, string prefix = "drawable")
+            {
+                ResourcesTypes = resourcesTypes;
+                FilePath = filePath;
+                FileName = fileName;
+                DestinationDirectory = destinationDirectory;
+                Quality = quality;
+                Icon = icon;
+                Postfix = postfix;
+                Prefix = prefix;
+            }
+
+            public Dictionary<AndroidResourceType, float> ResourcesTypes { get; }
+            public string FilePath { get; }
+            public string FileName { get; }
+            public string DestinationDirectory { get; }
+            public int Quality { get; }
+            public bool Icon { get; }
+            public string Postfix { get; }
+            public string Prefix { get; }
+
+        }
     }
 }

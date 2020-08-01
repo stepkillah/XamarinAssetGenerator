@@ -3,13 +3,21 @@
     "AssetGenerator": {
       "commandName": "Project"
     },
-    "BasicConverting": {
+    "AppIcon": {
+      "commandName": "Project",
+      "commandLineArgs": "-m appiconios -s ../hk/appicon.svg -d ../temp"
+    },
+    "Android": {
       "commandName": "Project",
       "commandLineArgs": "-m android --source ../NTE -d ../temp"
     },
-    "AppIcon": {
+    "iOS": {
       "commandName": "Project",
-      "commandLineArgs": "-m appicon -s ../hk/appicon.svg -d ../temp"
+      "commandLineArgs": "-m ios --source ../NTE -d ../temp"
+    },
+    "AppIconAndroid": {
+      "commandName": "Project",
+      "commandLineArgs": "-m appiconandroid -s ../hk/appicon.svg -d ../temp"
     }
   }
 }

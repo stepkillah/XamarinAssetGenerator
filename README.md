@@ -6,7 +6,7 @@ Common usage:
 ```
 dotnet AssetGenerator.dll -d destinationfolder -m iOS -q 80 -s sourcefolder
 
-  -m, --mode           Required. Specify which assets to build. (ios, android, appicon)
+  -m, --mode           Required. Specify which assets to build. (ios, android, appiconandroid, appiconios)
 
   -s, --source         Specify source folder
 

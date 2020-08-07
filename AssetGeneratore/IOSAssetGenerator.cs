@@ -32,8 +32,8 @@ namespace AssetGenerator
                         newFilename = filename + $"@{i}x.png";
 
 
-                    var width = (int)(svg.Picture.CullRect.Width * i);
-                    var height = (int)(svg.Picture.CullRect.Height * i);
+                    var width = svg.Picture.CullRect.Width * i;
+                    var height = svg.Picture.CullRect.Height * i;
 
 
                     await PngHelper.GeneratePng(svg, width, height, Path.Combine(destinationDirectory, newFilename), quality);

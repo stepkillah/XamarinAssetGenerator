@@ -61,13 +61,13 @@ namespace AssetGenerator
                         ? $"{options.Prefix}-{name.ToLowerInvariant()}"
                         : $"{options.Prefix}-{name.ToLowerInvariant()}-{options.Postfix}";
 
-                    var width = options.Icon ? resourceType.Value : (int)(svg.Picture.CullRect.Width * resourceType.Value);
-                    var height = options.Icon ? resourceType.Value : (int)(svg.Picture.CullRect.Height * resourceType.Value);
+                    var width = options.Icon ? resourceType.Value : svg.Picture.CullRect.Width * resourceType.Value;
+                    var height = options.Icon ? resourceType.Value : svg.Picture.CullRect.Height * resourceType.Value;
 
                     // Cheap clamp
-                    if (width < 1)
+                    if (width < 1f)
                         width = 1;
-                    if (height < 1)
+                    if (height < 1f)
                         height = 1;
 
                     var filenameWithExtension = $"{options.FileName}.png";

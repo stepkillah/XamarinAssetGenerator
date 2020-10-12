@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using SkiaSharp;
 using Svg.Skia;
@@ -13,7 +14,6 @@ namespace AssetGenerator
 
             // calculate the scaling need to fit
             var matrix = SKMatrix.CreateScale(width / svg2.Picture.CullRect.Width, height / svg2.Picture.CullRect.Height);
-
             using var image = icon
                 ? ConvertProfile(SKImage.FromPicture(svg2.Picture, new SKSizeI((int)width, (int)height), matrix), width,
                     height)

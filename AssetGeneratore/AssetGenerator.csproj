@@ -9,8 +9,8 @@
     <ItemGroup>
         <PackageReference Include="CommandLineParser" Version="2.8.0" />
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-        <PackageReference Include="SkiaSharp" Version="2.80.1" />
-        <PackageReference Include="Svg.Skia" Version="0.4.1" />
+        <PackageReference Include="SkiaSharp" Version="2.80.2" />
+        <PackageReference Include="Svg.Skia" Version="0.4.2-preview7" />
     </ItemGroup>
 
 </Project>

@@ -17,14 +17,13 @@ steps:
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
-    restoreArguments: '--configuration $(buildConfiguration)'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) -p:Version=$(Version) '
 
 - task: DotNetCoreCLI@2
   inputs:

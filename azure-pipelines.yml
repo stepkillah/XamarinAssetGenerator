@@ -15,19 +15,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'Restore'
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
-    feedsToUse: 'select'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Build'
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration) -p:Version=$(Version) '
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish'
@@ -35,9 +22,16 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: '**/*.csproj'
-    arguments: '--output $(build.artifactstagingdirectory) -p:Version=$(Version) --configuration $(buildConfiguration)' 
+    arguments: '--output $(build.artifactstagingdirectory)/osx64 -p:Version=$(Version) --configuration $(buildConfiguration) -f netcoreapp3.1 -r osx-x64' 
     zipAfterPublish: true
-
+- task: DotNetCoreCLI@2
+  displayName: 'Publish'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/*.csproj'
+    arguments: '--output $(build.artifactstagingdirectory)/win64 -p:Version=$(Version) --configuration $(buildConfiguration) -f netcoreapp3.1 -r win-x64' 
+    zipAfterPublish: true
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'

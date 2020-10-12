@@ -17,7 +17,7 @@ variables:
 steps:
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish'
+  displayName: 'Publish OSX'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -25,7 +25,7 @@ steps:
     arguments: '--output $(build.artifactstagingdirectory)/osx64 -p:Version=$(Version) --configuration $(buildConfiguration) -f netcoreapp3.1 -r osx-x64' 
     zipAfterPublish: true
 - task: DotNetCoreCLI@2
-  displayName: 'Publish'
+  displayName: 'Publish Win'
   inputs:
     command: 'publish'
     publishWebProjects: false

@@ -22,7 +22,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: '**/*.csproj'
-    arguments: '--output $(build.artifactstagingdirectory) -p:Version=$(Version) --configuration $(buildConfiguration) -f netcoreapp3.1' 
+    arguments: '--output $(build.artifactstagingdirectory) -p:Version=$(Build.BuildNumber) --configuration $(buildConfiguration) -f netcoreapp3.1' 
     zipAfterPublish: true
     modifyOutputPath: false
 - task: PublishBuildArtifacts@1

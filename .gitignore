@@ -53,6 +53,9 @@ project.lock.json
 project.fragment.lock.json
 artifacts/
 
+
+[Pp]roperties/
+
 # StyleCop
 StyleCopReport.xml
 

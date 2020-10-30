@@ -4,11 +4,26 @@ using System.Threading.Tasks;
 using SkiaSharp;
 using Svg.Skia;
 
-namespace AssetGenerator
+namespace AssetGenerator.IconsGeneration
 {
-    public class PngHelper
+    public abstract class BaseAssetGenerator : IAssetGenerator
     {
-        public static async Task GeneratePng(SKSvg svg2, float width, float height, string filename, int quality, bool icon = false)
+        public abstract Task CreateAsset(string filepath, string filename, string destinationDirectory, int quality,
+            string postfix = default);
+
+
+        public abstract Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality);
+
+        protected virtual SKSvg GetSvg(string filePath)
+        {
+            SKSvg svg = new SKSvg();
+            svg.Load(filePath);
+            if (svg?.Picture == null)
+                throw new NullReferenceException(nameof(svg.Picture));
+            return svg;
+        }
+
+        protected virtual async Task GeneratePng(SKSvg svg2, float width, float height, string filename, int quality, bool icon = false)
         {
             if (svg2?.Picture == null) return;
 
@@ -24,7 +39,7 @@ namespace AssetGenerator
             data.SaveTo(stream);
             await stream.FlushAsync();
         }
-        private static SKImage ConvertProfile(SKImage data, float width, float height)
+        protected virtual SKImage ConvertProfile(SKImage data, float width, float height)
         {
             using SKImage srcImg = data;
             SKImageInfo info = new SKImageInfo((int)width, (int)height,
@@ -44,7 +59,7 @@ namespace AssetGenerator
             return newImg;
         }
 
-        private static SKBitmap RemoveTransparency(SKImage orig)
+        private SKBitmap RemoveTransparency(SKImage orig)
         {
             var original = SKBitmap.FromImage(orig);
 

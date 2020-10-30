@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using AssetGenerator.Enums;
 
-namespace AssetGenerator
+namespace AssetGenerator.IconsGeneration
 {
     public class AndroidAssetGenerator : BaseAssetGenerator
     {
@@ -77,8 +78,7 @@ namespace AssetGenerator
                         Directory.CreateDirectory(resourceDir);
                     }
                     var finalPath = Path.Combine(resourceDir, filenameWithExtension);
-                    //await PngHelper.GeneratePng(width, height, filepath, finalPath, quality);
-                    await PngHelper.GeneratePng(svg, width, height, finalPath, options.Quality);
+                    await GeneratePng(svg, width, height, finalPath, options.Quality);
 
                     Console.WriteLine($"Successfully created asset: {finalPath}");
 

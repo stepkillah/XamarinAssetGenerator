@@ -1,4 +1,4 @@
-﻿namespace AssetGenerator
+﻿namespace AssetGenerator.Enums
 {
     public enum GeneratorMode
     {

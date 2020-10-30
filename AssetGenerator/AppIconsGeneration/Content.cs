@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using SkiaSharp;
 
-namespace AssetGenerator.IconsGeneration
+namespace AssetGenerator.AppIconsGeneration
 {
     internal class Content
     {
         public Content()
         {
-            Images = new List<Image>();
+            Images = new List<IosImage>();
             Properties = new Properties();
             Info = new Info();
         }
 
         [JsonProperty("images")]
-        public List<Image> Images { get; set; }
+        public List<IosImage> Images { get; set; }
 
         [JsonProperty("info")]
         public Info Info { get; set; }
@@ -24,9 +21,9 @@ namespace AssetGenerator.IconsGeneration
         public Properties Properties { get; set; }
     }
 
-    internal class Image
+    internal class IosImage
     {
-        public Image()
+        public IosImage()
         {
         }
 

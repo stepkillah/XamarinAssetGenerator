@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace AssetGenerator
+namespace AssetGenerator.IconsGeneration
 {
     public interface IAssetGenerator
     {

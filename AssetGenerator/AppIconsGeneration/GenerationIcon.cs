@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SkiaSharp;
+﻿using SkiaSharp;
 
-namespace AssetGenerator.IconsGeneration
+namespace AssetGenerator.AppIconsGeneration
 {
     internal class GenerationIcon
     {

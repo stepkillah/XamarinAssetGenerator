@@ -2,18 +2,33 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using AssetGenerator.IconsGeneration;
+using AssetGenerator.AppIconsGeneration;
 using Newtonsoft.Json;
 using SkiaSharp;
-using Image = AssetGenerator.IconsGeneration.Image;
 
-namespace AssetGenerator
+namespace AssetGenerator.IconsGeneration
 {
     public class IosAssetGenerator : BaseAssetGenerator
     {
         private const string IphoneIdiom = "iphone";
         private const string IpadIdiom = "ipad";
         private const string IosMarketing = "ios-marketing";
+        
+        private List<GenerationIcon> IconSizes => new List<GenerationIcon>()
+        {
+            new GenerationIcon(new SKSize(20,20), new []{2,3}, IphoneIdiom),
+            new GenerationIcon(new SKSize(29,29), new []{2,3}, IphoneIdiom),
+            new GenerationIcon(new SKSize(40,40), new []{2,3}, IphoneIdiom),
+            new GenerationIcon(new SKSize(60,60), new []{2,3}, IphoneIdiom),
+
+            new GenerationIcon(new SKSize(20,20), new []{1,2}, IpadIdiom),
+            new GenerationIcon(new SKSize(29,29), new []{1,2}, IpadIdiom),
+            new GenerationIcon(new SKSize(40,40), new []{1,2}, IpadIdiom),
+            new GenerationIcon(new SKSize(76,76), new []{1,2}, IpadIdiom),
+            new GenerationIcon(new SKSize(83.5f,83.5f), new []{2}, IpadIdiom),
+            new GenerationIcon(new SKSize(1024,1024), new []{1}, IosMarketing)
+        };
+
 
         public override async Task CreateAsset(string filepath, string filename, string destinationDirectory, int quality,
             string postfix = default)
@@ -31,12 +46,10 @@ namespace AssetGenerator
                     else
                         newFilename = filename + $"@{i}x.png";
 
-
                     var width = svg.Picture.CullRect.Width * i;
                     var height = svg.Picture.CullRect.Height * i;
-
-
-                    await PngHelper.GeneratePng(svg, width, height, Path.Combine(destinationDirectory, newFilename), quality);
+                    
+                    await GeneratePng(svg, width, height, Path.Combine(destinationDirectory, newFilename), quality);
                     Console.WriteLine($"Successfully created asset: {Path.GetFileName(newFilename)}");
                 }
                 catch (Exception e)
@@ -48,20 +61,6 @@ namespace AssetGenerator
                 }
             }
         }
-        private List<GenerationIcon> IconSizes => new List<GenerationIcon>()
-        {
-            new GenerationIcon(new SKSize(20,20), new []{2,3}, IphoneIdiom),
-            new GenerationIcon(new SKSize(29,29), new []{2,3}, IphoneIdiom),
-            new GenerationIcon(new SKSize(40,40), new []{2,3}, IphoneIdiom),
-            new GenerationIcon(new SKSize(60,60), new []{2,3}, IphoneIdiom),
-
-            new GenerationIcon(new SKSize(20,20), new []{1,2}, IpadIdiom),
-            new GenerationIcon(new SKSize(29,29), new []{1,2}, IpadIdiom),
-            new GenerationIcon(new SKSize(40,40), new []{1,2}, IpadIdiom),
-            new GenerationIcon(new SKSize(76,76), new []{1,2}, IpadIdiom),
-            new GenerationIcon(new SKSize(83.5f,83.5f), new []{2}, IpadIdiom),
-            new GenerationIcon(new SKSize(1024,1024), new []{1}, IosMarketing)
-        };
 
         public override async Task CreateIcon(string filePath, string fileName, string destinationDirectory, int quality)
         {
@@ -72,8 +71,8 @@ namespace AssetGenerator
                 foreach (int scale in icon.Scale)
                 {
                     var newFilename = scale > 1 ? $"{fileName}-{icon.Size.Width}@{scale}x~{icon.Idiom}.png" : $"{fileName}-{icon.Size.Width}~{icon.Idiom}.png";
-                    await PngHelper.GeneratePng(iconSvg, icon.Size.Width * scale, icon.Size.Height * scale, Path.Combine(destinationDirectory, newFilename), quality, true);
-                    contentJson.Images.Add(new Image()
+                    await GeneratePng(iconSvg, icon.Size.Width * scale, icon.Size.Height * scale, Path.Combine(destinationDirectory, newFilename), quality, true);
+                    contentJson.Images.Add(new IosImage()
                     {
                         Scale = $"{scale}x",
                         Size = $"{icon.Size.Width}x{icon.Size.Height}",

@@ -17,21 +17,12 @@ variables:
 steps:
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish OSX'
+  displayName: 'Publish'
   inputs:
     command: 'publish'
     publishWebProjects: false
     projects: '**/*.csproj'
-    arguments: '--output $(build.artifactstagingdirectory)/osx64 -p:Version=$(Version) --configuration $(buildConfiguration) -f netcoreapp3.1 -r osx-x64' 
-    zipAfterPublish: true
-    modifyOutputPath: false
-- task: DotNetCoreCLI@2
-  displayName: 'Publish Win'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/*.csproj'
-    arguments: '--output $(build.artifactstagingdirectory)/win64 -p:Version=$(Version) --configuration $(buildConfiguration) -f netcoreapp3.1 -r win-x64' 
+    arguments: '--output $(build.artifactstagingdirectory) -p:Version=$(Version) --configuration $(buildConfiguration) -f netcoreapp3.1' 
     zipAfterPublish: true
     modifyOutputPath: false
 - task: PublishBuildArtifacts@1
